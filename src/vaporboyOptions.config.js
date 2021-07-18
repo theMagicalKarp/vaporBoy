@@ -17,4 +17,5 @@ export const VAPORBOY_DEFAULT_OPTIONS = {
   gameboyFrameRate: 60,
   showDebugMenu: false,
   hideGamepadInExpandedMode: false,
+  hapticFeedback: true,
 };

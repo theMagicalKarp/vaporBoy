@@ -97,6 +97,7 @@ export default class GameboyDpad extends Component {
       ...this.state,
       elementId: getInputId()
     });
+    this.onTouch = this.onTouch.bind(this);
   }
 
   componentDidMount() {
@@ -107,18 +108,39 @@ export default class GameboyDpad extends Component {
       allowMultipleDirections: false
     });
 
+    Pubx.subscribe(
+      PUBX_CONFIG.VAPORBOY_OPTIONS_KEY,
+      newState => {
+        this.setState({
+          ...this.state,
+          options: {
+            ...newState
+          }
+        });
+      }
+    );
+
     this.setState({
       ...this.state,
       layout: {
         ...pubxLayoutState
       },
-      removeTouchInput
+      removeTouchInput,
+      options: {
+        ...Pubx.get(PUBX_CONFIG.VAPORBOY_OPTIONS_KEY)
+      },
     });
   }
 
   componentWillUnmount() {
     if (this.state.removeTouchInput) {
       this.state.removeTouchInput();
+    }
+  }
+
+  onTouch(e) {
+    if (this.state.options.hapticFeedback) {
+      window.navigator.vibrate(50);
     }
   }
 
@@ -146,6 +168,7 @@ export default class GameboyDpad extends Component {
           id={this.state.elementId}
           viewBox="0 0 189 189"
           xmlns="http://www.w3.org/2000/svg"
+          onTouchStart={this.onTouch}
         >
           <defs>
             <radialGradient

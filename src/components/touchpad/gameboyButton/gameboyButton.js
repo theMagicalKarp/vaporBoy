@@ -76,6 +76,8 @@ export default class GameboyButton extends Component {
       elementId: getInputId(),
       keyMapButton: undefined
     });
+
+    this.onTouch = this.onTouch.bind(this);
   }
 
   componentDidMount() {
@@ -89,13 +91,28 @@ export default class GameboyButton extends Component {
       keyMapButton
     );
 
+    Pubx.subscribe(
+      PUBX_CONFIG.VAPORBOY_OPTIONS_KEY,
+      newState => {
+        this.setState({
+          ...this.state,
+          options: {
+            ...newState
+          }
+        });
+      }
+    );
+
     this.setState({
       ...this.state,
       keyMapButton: keyMapButton,
       layout: {
         ...pubxLayoutState
       },
-      removeTouchInput
+      removeTouchInput,
+      options: {
+        ...Pubx.get(PUBX_CONFIG.VAPORBOY_OPTIONS_KEY)
+      },
     });
   }
 
@@ -153,6 +170,12 @@ export default class GameboyButton extends Component {
     }
 
     return defaultY;
+  }
+
+  onTouch(e) {
+    if (this.state.options.hapticFeedback) {
+      window.navigator.vibrate(50);
+    }
   }
 
   render() {
@@ -225,6 +248,7 @@ export default class GameboyButton extends Component {
           id={this.state.elementId}
           viewBox="0 0 100 100"
           xmlns="http://www.w3.org/2000/svg"
+          onTouchStart={this.onTouch}
         >
           <defs>
             <radialGradient

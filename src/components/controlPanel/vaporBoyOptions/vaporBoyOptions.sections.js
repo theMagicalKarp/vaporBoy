@@ -52,6 +52,16 @@ export const VAPORBOY_OPTION_SECTIONS = {
           </div>
         ),
         type: "boolean"
+      },
+      hapticFeedback: {
+        name: "Haptic Feedback",
+        descriptionElement: (
+          <div>
+            Vibrate device when buttons are touched. This is helpful for
+            providing interface feedback.
+          </div>
+        ),
+        type: "boolean"
       }
     }
   },
